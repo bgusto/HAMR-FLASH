@@ -67,7 +67,13 @@ Runtime parameters associated with these modules are listed below:
 + `wvlt_interpeos` (boolean, false): allows for the interpolation of EoS
 + `wvlt_interpburn` (boolean, false): allows for the interpolation of reaction products
 
-Note that shortcuts are included for convenience when setting up and compiling new problems:
+Additional parameters may be included in the modified physics modules. From the
+`mrPPMKernel` module, the following parameters are defined:
+
++ `mrppm_iord` (integer, 3): order of the multiresolution flux interpolant (1 or 3)
++ `mrppm_simplemask` (boolean, true): groups fluxes together by level on the local MR hierarchy if set to true (possibly improved computational efficiency due to the omission of custom mask construction routine
+
+Shortcuts are included for convenience when setting up and compiling new problems:
 
 + `amr_wvlt`: enables MR-driven AMR
 + `mrppm`: includes `source/physics/Hydro/HydroMain/split/PPM/mrPPMKernel` and enables interpolation of numerical fluxes

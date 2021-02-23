@@ -59,13 +59,18 @@ if (-d "source") {
     copy("$toppm/PPMKernel/$_", "$toppm/mrPPMKernel/$_") or $op3 = 'false';
   }
 
-  # core ppm files
+  # from outside PPMKernel or name change
   copy("$toppm/PPMKernel/hydro_1d.F90", "$toppm/mrPPMKernel/ppm_hydro.F90") or $op3 = 'false';
   copy("$toppm/PPMKernel/intrfc.F90", "$toppm/mrPPMKernel/ppm_intrfc.F90") or $op3 = 'false';
-  copy("$toppm/PPMKernel/interp.F90", "$toppm/mrPPMKernel/ppm_interp.F90") or $op3 = 'false';
-  copy("$toppm/PPMKernel/monot.F90", "$toppm/mrPPMKernel/ppm_profile.F90") or $op3 = 'false';
   copy("$toppm/PPMKernel/states.F90", "$toppm/mrPPMKernel/ppm_states.F90") or $op3 = 'false';
   copy("$toppm/PPMKernel/rieman.F90", "$toppm/mrPPMKernel/ppm_riemann.F90") or $op3 = 'false';
+  copy("$toppm/PPMKernel/interp_char.F90", "$toppm/mrPPMKernel/ppm_interp_char.F90") or $op3 = 'false';
+  copy("$toppm/Hydro_init.F90", "$toppm/mrPPMKernel/Hydro_init.F90") or $op3 = 'false';
+  copy("$toppm/Hydro_data.F90", "$toppm/mrPPMKernel/Hydro_data.F90") or $op3 = 'false';
+  copy("$toppm/Hydro_finalize.F90", "$toppm/mrPPMKernel/Hydro_finalize.F90") or $op3 = 'false';
+  copy("$toppm/hy_ppm_block.F90", "$toppm/mrPPMKernel/hy_ppm_block.F90") or $op3 = 'false';
+  copy("$toppm/PPM.h", "$toppm/mrPPMKernel/PPM.h") or $op3 = 'false';
+  copy("$toppm/Config", "$toppm/mrPPMKernel/Config") or $op3 = 'false';
 
   # apply patch
   `patch -p0 < hamr.patch`;
