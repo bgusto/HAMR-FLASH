@@ -1,0 +1,131 @@
+#	Runtime parameters for the Woodward-Colella interacting blast problem.
+
+#------- Initial conditions -------#
+
+#	density, pressure, and velocity in each section of the grid
+sim_rhoLeft        =    1.
+sim_rhoMid         =    1.
+sim_rhoRight       =    1.
+sim_pLeft          =    1000.
+sim_pMid           =    0.01
+sim_pRight         =    100.
+sim_uLeft          =    0.
+sim_uMid           =    0.
+sim_uRight         =    0.
+
+#	angle and position of interfaces relative to x and y axes
+sim_xangle = 0.
+sim_yangle = 90.
+sim_posnL = 0.1
+sim_posnR = 0.9
+
+#	gas ratio of specific heats
+gamma = 1.4
+
+
+#------- Temporal parameters -------#
+
+# length of simulation 
+nend            = 99999
+#nend            = 2
+tmax            = 0.038
+
+#	cfl
+cfl_init = 0.1
+cfl		= 0.8
+#dtMin = 8e-07
+#dtMax = 8e-07
+
+
+#------- Domain and Boundary conditions -------#
+
+#		Grid dimensionality and geometry
+geometry = "cartesian"
+
+#		Size of computational volume
+xmin		= 0.
+xmax		= 1.e0
+
+#		Boundary conditions
+xl_boundary_type = "reflect"
+xr_boundary_type = "reflect"
+
+
+#------- Mesh -------#
+
+# number of blocks
+nblockx = 4
+
+# number of amr levels allowed
+lrefine_max = 6
+lrefine_min = 6
+nrefs = 1
+
+# number of wavelet refine vars + select which vars
+wvlt_refine_var_1 = "dens"
+wvlt_refine_var_2 = "velx"
+wvlt_refine_var_3 = "pres"
+
+# wavelet threshold
+wvlt_thresh = 1.e0
+wvlt_userelative = .true.
+
+# width of buffer zone
+wvlt_nbuffer = 4
+
+# use harten's scheme on blocks
+wvlt_threshfactor = 1.e-04
+wvlt_interphydro = .true.
+mrppm_simplemask = .false.
+mrppm_iord = 1
+
+# number of wavelet levels per block
+wvlt_maxLvl = 3
+
+
+#------- Hydro parameters -------#
+
+# riemann solver
+ppmRiemannSolver = "exact"
+rieman_tol = 1e-12
+nriem = 60
+
+# limiters, artif. viscosity, flattening/steepening
+charLimiting	= .false. # Characteristic limiting vs. Primitive limiting
+cvisc		= 0.1     # coefficient for artificial viscosity
+use_flattening	= .true. # use flattening (dissipative) (originally for PPM)
+use_steepening	= .false. # use contact steepening (originally for PPM)
+use_upwindTVD	= .false. # use upwind biased TVD slope for PPM (need nguard=6)
+
+#	Misc parameters
+eintSwitch = 0.
+convertToConsvdInMeshInterp  = .true.
+
+
+#------- IO -------#
+
+# basename + log file
+basenm = "blast2_"
+log_file	= "blast2.log"
+
+# data output
+output_directory = "chkfiles"
+
+# restart
+restart = .false.
+
+#	checkpoint file output parameters
+checkpointFileIntervalTime = 0.001
+#checkpointFileIntervalStep = 5
+checkpointFileNumber = 0
+
+#	plotfile output parameters
+plotfileIntervalTime = 0.
+plotfileIntervalStep = 0
+plotfileNumber = 0
+
+# add a comment
+run_comment	= "Woodward-Colella blast wave (to t=0.038)"
+
+# write the conservation dat file
+wr_integrals_freq = 1

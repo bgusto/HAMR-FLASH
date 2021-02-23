@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Brandon Gusto" />
+  <meta name="date" content="2021-02-23" />
+  <title>README</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<div id="header">
+<h1 class="title">README</h1>
+<h2 class="author">Brandon Gusto</h2>
+<h3 class="date">February 23, 2021</h3>
+</div>
+<h2 id="overview">Overview</h2>
+<p>The hybrid adaptive multiresolution (HAMR) code is an add-on package for the FLASH simulation code <span class="citation">(<span>Fryxell</span> et al. 2000)</span>, and can be downloaded freely at <a href="https://github.com/blg13/HAMR-FLASH">https://github.com/blg13/HAMR-FLASH</a>. The HAMR approach uses multiresolution (MR) indicators not only to guide the refinement/coarsening of Cartesian meshes utilizing adaptive mesh refinement (AMR), but also to accelerate calculations of physical quantities in smooth regions. Note that the current implementation is limited to the Paramesh library <span class="citation">(MacNeice et al. 2000)</span>, and that the code currently assumes that cells that are equally spaced in each direction. The package is designed to patch the latest release of FLASH, <code>FLASH4.6.2</code>.</p>
+<h2 id="description">Description</h2>
+<p>The HAMR-FLASH package is divided into two components: multiresolution-driven AMR (MrAMR) and HAMR. The first component can be used if one wants to use MR indicators for AMR purposes only. The latter component uses the former one, but also introduces solver-adaptivity; that is, using MR indicators to further accelerate the calculation of physical quantities using interpolation from coarser levels. The physical quantities currently considered by the algorithm are the hydrodynamic fluxes (split PPM), equation of state (EoS), and the reactive source terms.</p>
+<p>The AMR blocks in FLASH are tagged for refinement or coarsening according to MR smoothness indicators (hereafter referred to as detail coefficients). A new directory, <code>source/Grid/GridSolvers/Multiresolution</code>, is included to handle the calculation of detail coefficients, and the construction of the MR mask. The MR mask is constructed by ignoring the cells whose corresponding detail coefficients are smaller than a user-defined tolerance. In general the construction of the mask requires communication between blocks, as the algorithm ‘warns’ cells surrounding non-smooth features. The calling of MR subroutines is handled by modified Paramesh files, located in <code>source/Grid/GridMain/paramesh/multiresolution</code>. Runtime parameters associated with this module are listed below:</p>
+<ul>
+<li><code>wvlt_thresh</code> (real, 0.e0): user-defined tolerance for truncating detail coefficients</li>
+<li><code>wvlt_userelative</code> (boolean, false): computes detail coefficient values relative to solution magnitudes</li>
+<li><code>wvlt_nbuffer</code> (integer, 1): number of cells in each direction of the MR buffer region</li>
+<li><code>wvlt_maxlvl</code> (integer, 3): number of levels in the local MR hierarchy (minimum of three required for AMR)</li>
+<li><code>wvlt_diagnostic</code> (boolean, true): saves detail coefficient values for checkpoint and plotfiles</li>
+<li><code>wvlt_refine_var_1</code> (string, “none”): refinement variable</li>
+<li><code>wvlt_refine_var_2</code> (string, “none”): refinement variable</li>
+<li><code>wvlt_refine_var_3</code> (string, “none”): refinement variable</li>
+<li><code>wvlt_refine_var_4</code> (string, “none”): refinement variable</li>
+<li><code>wvlt_refine_var_5</code> (string, “none”): refinement variable</li>
+<li><code>wvlt_refine_var_6</code> (string, “none”): refinement variable</li>
+</ul>
+<p>The interpolation of numerical flux follows the procedure originally introduced by Harten <span class="citation">(Harten 1994)</span>. High quality numerical flux calculations are replaced in smooth regions (as determined by the tolerance) with interpolation from interfaces corresponding to coarser grid levels, where flux values are already available. The same general approach is used for the evaluation of the Helmholtz EoS, and integration of reaction networks for reactive problems. Runtime parameters associated with these modules are listed below:</p>
+<ul>
+<li><code>wvlt_threshfactor</code> (real, 0.e0): safety factor pre-multiplying the parameter <code>wvlt_thresh</code> for the construction of the solver-adaptive mask</li>
+<li><code>wvlt_interphydro</code> (boolean, false): allows for the interpolation of numerical fluxes</li>
+<li><code>wvlt_interpeos</code> (boolean, false): allows for the interpolation of EoS</li>
+<li><code>wvlt_interpburn</code> (boolean, false): allows for the interpolation of reaction products</li>
+</ul>
+<p>Note that shortcuts are included for convenience when setting up and compiling new problems:</p>
+<ul>
+<li><code>amr_wvlt</code>: enables MR-driven AMR</li>
+<li><code>mrppm</code>: includes <code>source/physics/Hydro/HydroMain/split/PPM/mrPPMKernel</code> and enables interpolation of numerical fluxes</li>
+</ul>
+<h2 id="dependencies">Dependencies</h2>
+<p>The software required to use the HAMR-FLASH package is as follows:</p>
+<ol style="list-style-type: decimal">
+<li>A copy of <code>FLASH4.6.2</code> (earlier releases are not yet supported)</li>
+<li><code>perl</code> (<code>v5.16.0</code> or later recommended)</li>
+</ol>
+<h2 id="installation">Installation</h2>
+<p>How to install the HAMR package:</p>
+<ol style="list-style-type: decimal">
+<li>Download the package at <a href="https://github.com/blg13/HAMR-FLASH">https://github.com/blg13/HAMR-FLASH</a></li>
+<li>Navigate to the root directory of your copy of <code>FLASH4.6.2</code></li>
+<li>Run the included installer script, <code>install_patch.pl</code></li>
+</ol>
+<p>Once these steps are successfully completed, the modified FLASH code is ready to run.</p>
+<h2 id="examples">Examples</h2>
+<p>Some example problem setups can be found below:</p>
+<pre><code>$PATHTOFLASH/setup Blast2 \
+   -auto \
+   -1d \
+   -nxb=16 \
+   -maxblocks=2000 \
+   -with-unit=source/physics/Hydro/HydroMain/split/PPM/mrPPMKernel \
+   +amr_wvlt \
+   +mrppm \
+   -objdir=object</code></pre>
+<div class="references">
+<h2>References</h2>
+<p><span>Fryxell</span>, B., K. <span>Olson</span>, P. <span>Ricker</span>, F. X. <span>Timmes</span>, M. <span>Zingale</span>, D. Q. <span>Lamb</span>, P. <span>MacNeice</span>, R. <span>Rosner</span>, J. W. <span>Truran</span>, and H. <span>Tufo</span>. 2000. “FLASH: An Adaptive Mesh Hydrodynamics Code for Modeling Astrophysical Thermonuclear Flashes” 131 (1) (November): 273–334. doi:<a href="http://dx.doi.org/10.1086/317361">10.1086/317361</a>.</p>
+<p>Harten, A. 1994. “Adaptive Multiresolution Schemes for Shock Computations.” <em>Journal of Computational Physics</em> 115 (2): 319–338.</p>
+<p>MacNeice, Peter, Kevin M. Olson, Clark Mobarry, Rosalinda <span>de Fainchtein</span>, and Charles Packer. 2000. “PARAMESH: A Parallel Adaptive Mesh Refinement Community Toolkit.” <em>Computer Physics Communications</em> 126 (3): 330–354. doi:<a href="http://dx.doi.org/https://doi.org/10.1016/S0010-4655(99)00501-9">https://doi.org/10.1016/S0010-4655(99)00501-9</a>. <a href="https://www.sciencedirect.com/science/article/pii/S0010465599005019">https://www.sciencedirect.com/science/article/pii/S0010465599005019</a>.</p>
+</div>
+</body>
+</html>
