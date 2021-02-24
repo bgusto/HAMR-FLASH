@@ -113,6 +113,6 @@ problem is given below:
        -objdir=object
 
 A `flash.par` file is provided in `examples/blast2`, using a uniform resolution
-of `2048` cells and a solver-adaptive tolerance of `1e.-04`.
+of `2048` cells and a solver-adaptive tolerance of `1.e-04`.
 
 ## References
