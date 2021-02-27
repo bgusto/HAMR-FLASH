@@ -129,8 +129,8 @@ An example setup for the Hawley-Zabusky problem is provided below:
        -objdir=object
 
 A `flash.par` file is provided in `examples/hz`. The simulation is set up using
-6 blocks (with 16 cells per side) along the $x$-axis, and 6 levels of
-refinement, with a maximum resolution of $\triangle x = 0.121\ \text{cm}$. The
+6 blocks (with 16 cells per side) along the lateral direction, and 6 levels of
+refinement, with a maximum resolution of `0.121` cm. The
 MR tolerance used for refinement is `1.e-02`, and the solver adaptive safety
 factor is `1.e-02`.
 
