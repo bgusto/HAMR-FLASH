@@ -1,5 +1,5 @@
 <h2 id="overview">Overview</h2>
-<p>The hybrid adaptive multiresolution (HAMR) code is an add-on package for the FLASH simulation code <span class="citation">(<span>Fryxell</span> et al. 2000)</span>, and can be downloaded freely at <a href="https://github.com/blg13/HAMR-FLASH">https://github.com/blg13/HAMR-FLASH</a>. The HAMR approach uses multiresolution (MR) indicators not only to guide the refinement/coarsening of Cartesian meshes utilizing adaptive mesh refinement (AMR), but also to accelerate calculations of physical quantities in smooth regions. Note that the current implementation is limited to the Paramesh library <span class="citation">(MacNeice et al. 2000)</span>, and that the code currently assumes that cells that are equally spaced in each direction. The package is designed to patch the latest release of FLASH, <code>FLASH4.6.2</code>.</p>
+<p>The hybrid adaptive multiresolution (HAMR) code is an add-on package for the FLASH simulation code <span class="citation">[@fryxell2000]</span>, and can be downloaded freely at <a href="https://github.com/blg13/HAMR-FLASH">https://github.com/blg13/HAMR-FLASH</a>. The HAMR approach uses multiresolution (MR) indicators not only to guide the refinement/coarsening of Cartesian meshes utilizing adaptive mesh refinement (AMR), but also to accelerate calculations of physical quantities in smooth regions. Note that the current implementation is limited to the Paramesh library <span class="citation">[@macneice2000]</span>, and that the code currently assumes that cells that are equally spaced in each direction. The package is designed to patch the latest release of FLASH, <code>FLASH4.6.2</code>.</p>
 <h2 id="description">Description</h2>
 <p>The HAMR-FLASH package is divided into two components: multiresolution-driven AMR (MrAMR) and HAMR. The first component can be used if one wants to use MR indicators for AMR purposes only. The latter component uses the former one, but also introduces solver-adaptivity; that is, using MR indicators to further accelerate the calculation of physical quantities using interpolation from coarser levels. The physical quantities currently considered by the algorithm are the hydrodynamic fluxes (split PPM), equation of state (EoS), and the reactive source terms.</p>
 <p>The AMR blocks in FLASH are tagged for refinement or coarsening according to MR smoothness indicators (hereafter referred to as detail coefficients). A new directory, <code>source/Grid/GridSolvers/Multiresolution</code>, is included to handle the calculation of detail coefficients, and the construction of the MR mask. The MR mask is constructed by ignoring the cells whose corresponding detail coefficients are smaller than a user-defined tolerance. In general the construction of the mask requires communication between blocks, as the algorithm 'warns' cells surrounding non-smooth features. The calling of MR subroutines is handled by modified Paramesh files, located in <code>source/Grid/GridMain/paramesh/multiresolution</code>. Runtime parameters associated with this module are listed below:</p>
@@ -16,7 +16,7 @@
 <li><code>wvlt_refine_var_5</code> (string, &quot;none&quot;): refinement variable</li>
 <li><code>wvlt_refine_var_6</code> (string, &quot;none&quot;): refinement variable</li>
 </ul>
-<p>The interpolation of numerical flux follows the procedure originally introduced by Harten <span class="citation">(Harten 1994)</span>. High quality numerical flux calculations are replaced in smooth regions (as determined by the tolerance) with interpolation from interfaces corresponding to coarser grid levels, where flux values are already available. The same general approach is used for the evaluation of the Helmholtz EoS, and integration of reaction networks for reactive problems. Runtime parameters associated with these modules are listed below:</p>
+<p>The interpolation of numerical flux follows the procedure originally introduced by Harten <span class="citation">[@harten1994]</span>. High quality numerical flux calculations are replaced in smooth regions (as determined by the tolerance) with interpolation from interfaces corresponding to coarser grid levels, where flux values are already available. The same general approach is used for the evaluation of the Helmholtz EoS, and integration of reaction networks for reactive problems. Runtime parameters associated with these modules are listed below:</p>
 <ul>
 <li><code>wvlt_threshfactor</code> (real, 0.e0): safety factor pre-multiplying the parameter <code>wvlt_thresh</code> for the construction of the solver-adaptive mask</li>
 <li><code>wvlt_interphydro</code> (boolean, false): allows for the interpolation of numerical fluxes</li>
@@ -49,7 +49,7 @@
 <p>Once these steps are successfully completed, the modified FLASH code is ready to run.</p>
 <h2 id="examples">Examples</h2>
 <h3 id="blast2">Blast2</h3>
-<p>An example setup utilizing MR-driven AMR and solver-adaptivity for the Blast2 problem is given below:</p>
+<p>An example setup utilizing MR-driven AMR and solver adaptivity for the Blast2 problem is provided below:</p>
 <pre><code>$PATHTOFLASH/setup Blast2 \
    -auto \
    -1d \
@@ -58,10 +58,16 @@
    +amr_wvlt \
    +mrppm \
    -objdir=object</code></pre>
-<p>A <code>flash.par</code> file is provided in <code>examples/blast2</code>, using a uniform resolution of <code>2048</code> cells and a solver-adaptive tolerance of <code>1e.-04</code>.</p>
-<div class="references">
-<h2>References</h2>
-<p><span>Fryxell</span>, B., K. <span>Olson</span>, P. <span>Ricker</span>, F. X. <span>Timmes</span>, M. <span>Zingale</span>, D. Q. <span>Lamb</span>, P. <span>MacNeice</span>, R. <span>Rosner</span>, J. W. <span>Truran</span>, and H. <span>Tufo</span>. 2000. “FLASH: An Adaptive Mesh Hydrodynamics Code for Modeling Astrophysical Thermonuclear Flashes” 131 (1) (November): 273–334. doi:<a href="http://dx.doi.org/10.1086/317361">10.1086/317361</a>.</p>
-<p>Harten, A. 1994. “Adaptive Multiresolution Schemes for Shock Computations.” <em>Journal of Computational Physics</em> 115 (2): 319–338.</p>
-<p>MacNeice, Peter, Kevin M. Olson, Clark Mobarry, Rosalinda <span>de Fainchtein</span>, and Charles Packer. 2000. “PARAMESH: A Parallel Adaptive Mesh Refinement Community Toolkit.” <em>Computer Physics Communications</em> 126 (3): 330–354. doi:<a href="http://dx.doi.org/https://doi.org/10.1016/S0010-4655(99)00501-9">https://doi.org/10.1016/S0010-4655(99)00501-9</a>. <a href="https://www.sciencedirect.com/science/article/pii/S0010465599005019">https://www.sciencedirect.com/science/article/pii/S0010465599005019</a>.</p>
-</div>
+<p>A <code>flash.par</code> file is provided in <code>examples/blast2</code>, using a uniform resolution of <code>2048</code> cells and a solver-adaptive tolerance of <code>1.e-04</code>.</p>
+<h3 id="hawley-zabusky">Hawley-Zabusky</h3>
+<p>An example setup for the Hawley-Zabusky problem is provided below:</p>
+<pre><code>$PATHTOFLASH/setup  HZ/HZstripped \
+   -auto \
+   -2d \
+   -nxb=16 -nyb=16 \
+   -maxblocks=2000 \
+   +amr_wvlt \
+   +mrppm \
+   -objdir=object</code></pre>
+<p>A <code>flash.par</code> file is provided in <code>examples/hz</code>. The simulation is set up using 6 blocks (with 16 cells per side) along the <span class="math"><em>x</em></span>-axis, and 6 levels of refinement, with a maximum resolution of <span class="math">△<em>x</em> = 0.121 cm</span>. The MR tolerance used for refinement is <code>1.e-02</code>, and the solver adaptive safety factor is <code>1.e-02</code>.</p>
+<h2 id="references">References</h2>

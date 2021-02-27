@@ -1,0 +1,157 @@
+#	runtime parameters for the nonreactive HZ problem
+
+#------- Initial conditions -------#
+
+gamma	= 1.4e0
+
+preDens = 1.e0
+prePres = 1.e0
+preVelx = 0.e0
+
+# upstream perturbations
+noiseAmplitude = 0.e-2
+noiseDistance = 5.e0
+noiseSeed = 0
+
+# shock parameters
+shockMach = 1.2e0
+shockXpos	= 5.e0
+useFlatShock = .false.
+
+# contact discontinuity
+cdDensRatio = 3.e0
+cdAngle = 30.e0
+cdXpos = 15.e0
+
+
+#------- Temporal parameters -------#
+
+# length of simulation 
+nend = 99999
+tmax = 620
+
+#	cfl
+cfl_init = 0.1
+cfl	= 0.8
+dtInit = 1e-03
+#dtMin = 1e-02
+#dtMax = 1e-02
+
+
+#------- Domain and Boundary conditions -------#
+
+#	grid dimensionality and geometry
+geometry = "cartesian"
+
+#	size of computational volume
+xmin = 0.e0
+xmax = 372.e0
+ymin = 0.e0
+ymax = 62.e0
+zmin = 0.
+zmax = 62.e0
+
+#	boundary conditions
+xl_boundary_type = "outflow"
+xr_boundary_type = "outflow"
+
+yl_boundary_type = "reflect"
+yr_boundary_type = "reflect"
+
+zl_boundary_type = "reflect"
+zr_boundary_type = "reflect"
+
+
+#------- Mesh -------#
+
+# number of blocks per direction (set for 3072x512 cells in the domain with 32x32 cell blocks)
+nblockx = 6
+nblocky = 1
+nblockz = 1
+
+# number of amr levels allowed
+lrefine_max = 6
+lrefine_min = 1
+nrefs = 1
+
+# number of wavelet refine vars + select which vars
+wvlt_refine_var_1 = "dens"
+wvlt_refine_var_2 = "pres"
+wvlt_refine_var_3 = "vely"
+
+# wavelet threshold
+wvlt_thresh = 0.01
+wvlt_userelative = .true.
+
+# width of buffer zone
+wvlt_nbuffer = 4
+
+# solver-adaptive safety factor
+wvlt_threshfactor = 0.01
+
+# use harten's scheme on blocks
+wvlt_interphydro = .true.
+wvlt_interpeos = .false.
+wvlt_interpburn = .false.
+
+# ppm parameters
+mrppm_iord = 1
+mrppm_simplemask = .true.
+
+# multiresolution interpolation options
+wvlt_maxLvl = 3
+
+
+#------- Hydro parameters -------#
+
+# consistent multi-fluid advectoin
+#use_cma_advection = .true.
+#use_cma_flattening = .true.
+
+# riemann solver
+ppmRiemannSolver = "EXACT"
+rieman_tol = 1e-10
+nriem = 50
+
+# limiters, artif. viscosity, flattening/steepening
+charLimiting	= .false.
+cvisc = 0.1e0
+use_flattening	= .false.
+use_steepening	= .false.
+hybrid_riemann= .false.
+
+#	entropy fix for Roe solver
+entropy = .false.
+
+#	strong shock handling
+shockDetect	= .false.
+
+#	Misc parameters
+eintSwitch     = 0.
+convertToConsvdInMeshInterp   = .true.
+
+#------- IO -------#
+
+# basename
+basenm = hz_
+log_file = hz.log
+
+# restart
+restart = .false.
+restart_fromlast = .false.
+#checkpointFileNumber = 0
+
+#	checkpoint file output parameters
+checkpointFileIntervalTime = 10.e0
+#outputEveryStep = .true.
+
+#	plotfile output parameters
+plotfileIntervalTime = 0
+plotfileIntervalStep = 0
+plotfileNumber = 0
+
+# simulation name and log file name
+run_comment = "Nonreactive Hawley-Zabusky problem"
+
+# write the conservation dat file
+wr_integrals_freq = 1

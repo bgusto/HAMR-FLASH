@@ -100,8 +100,8 @@ to run.
 
 ### Blast2
 
-An example setup utilizing MR-driven AMR and solver-adaptivity for the Blast2
-problem is given below:
+An example setup utilizing MR-driven AMR and solver adaptivity for the Blast2
+problem is provided below:
 
     $PATHTOFLASH/setup Blast2 \
        -auto \
@@ -114,5 +114,24 @@ problem is given below:
 
 A `flash.par` file is provided in `examples/blast2`, using a uniform resolution
 of `2048` cells and a solver-adaptive tolerance of `1.e-04`.
+
+### Hawley-Zabusky
+
+An example setup for the Hawley-Zabusky problem is provided below:
+
+    $PATHTOFLASH/setup  HZ/HZstripped \
+       -auto \
+       -2d \
+       -nxb=16 -nyb=16 \
+       -maxblocks=2000 \
+       +amr_wvlt \
+       +mrppm \
+       -objdir=object
+
+A `flash.par` file is provided in `examples/hz`. The simulation is set up using
+6 blocks (with 16 cells per side) along the $x$-axis, and 6 levels of
+refinement, with a maximum resolution of $\triangle x = 0.121\ \text{cm}$. The
+MR tolerance used for refinement is `1.e-02`, and the solver adaptive safety
+factor is `1.e-02`.
 
 ## References
