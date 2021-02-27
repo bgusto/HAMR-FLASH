@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <h2 id="overview">Overview</h2>
 <p>The hybrid adaptive multiresolution (HAMR) code is an add-on package for the FLASH simulation code <span class="citation">[@fryxell2000]</span>, and can be downloaded freely at <a href="https://github.com/blg13/HAMR-FLASH">https://github.com/blg13/HAMR-FLASH</a>. The HAMR approach uses multiresolution (MR) indicators not only to guide the refinement/coarsening of Cartesian meshes utilizing adaptive mesh refinement (AMR), but also to accelerate calculations of physical quantities in smooth regions. Note that the current implementation is limited to the Paramesh library <span class="citation">[@macneice2000]</span>, and that the code currently assumes that cells that are equally spaced in each direction. The package is designed to patch the latest release of FLASH, <code>FLASH4.6.2</code>.</p>
 <h2 id="description">Description</h2>
@@ -70,5 +69,5 @@
    +amr_wvlt \
    +mrppm \
    -objdir=object</code></pre>
-<p>A <code>flash.par</code> file is provided in <code>examples/hz</code>. The simulation is set up using 6 blocks (with 16 cells per side) along the <span class="math"><em>x</em></span>-axis, and 6 levels of refinement, with a maximum resolution of <span class="math">△<em>x</em> = 0.121 cm</span>. The MR tolerance used for refinement is <code>1.e-02</code>, and the solver adaptive safety factor is <code>1.e-02</code>.</p>
+<p>A <code>flash.par</code> file is provided in <code>examples/hz</code>. The simulation is set up using 6 blocks (with 16 cells per side) along the lateral direction, and 6 levels of refinement, with a maximum resolution of <code>0.121</code> cm. The MR tolerance used for refinement is <code>1.e-02</code>, and the solver adaptive safety factor is <code>1.e-02</code>.</p>
 <h2 id="references">References</h2>
